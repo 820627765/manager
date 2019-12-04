@@ -28,5 +28,8 @@
             <input type="hidden" name="_method" value="put"/>
             <input type="submit" value="修改"/>
         </form>
+        <br/>
+        <a href="testModelAndView">testModelAndView</a><br/>
+        <a href="testMap">testMap</a><br/>
     </body>
 </html>

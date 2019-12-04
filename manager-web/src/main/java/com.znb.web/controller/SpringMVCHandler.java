@@ -1,7 +1,11 @@
 package com.znb.web.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 /**
  * @Auther zhangningbo
@@ -98,4 +102,43 @@ public class SpringMVCHandler {
         System.out.println(sessionId);
         return "success";
     }
+
+    /**
+     * ModelAndView
+     * springMVC 会把ModeAndView中的模型数据存储到request请求域中
+     */
+    @RequestMapping("/testModelAndView")
+    public ModelAndView testModelAndView(){
+        //模型数据需要为：username=Admin
+        ModelAndView mv = new ModelAndView();
+        //添加模型数据
+        mv.addObject("username","Admin");
+        //设置视图信息
+        mv.setViewName("success");
+        return mv;
+    }
+
+    /**
+     * Map or Model
+     * SpringMVC 会把Map中的数据存储到request 请求域中。
+     * SpringMVC 在调用完请求处理方法后，不管处理器返回类型是什么，都会封装为一个ModelAndView 对象。
+     *
+     */
+    @RequestMapping("/testMap")
+    public String testMap(Map<String,Object> map){
+        //模型数据为:password=123456
+        map.put("password","123456");
+        return "success";
+    }
+
+    /**
+     * Model
+     */
+    @RequestMapping("/testModel")
+    public String testModel(Model model){
+        //模型数据为:loginMsg=success
+        model.addAttribute("loginMsg","success");
+        return "success";
+    }
+
 }

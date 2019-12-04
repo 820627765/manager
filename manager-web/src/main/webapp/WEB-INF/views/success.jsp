@@ -12,6 +12,8 @@
     <title>success</title>
 </head>
 <body>
-    success!
+    <h2>success!</h2>
+    username:${requestScope.username} <br/>
+    password:${requestScope.password}
 </body>
 </html>
