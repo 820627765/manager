@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -55,7 +56,8 @@ public class SpringMVCHandler {
      * REST PUT
      */
     @RequestMapping(value="/order",method = RequestMethod.PUT)
-    public String testRestPut(){
+    public String testRestPut(HttpServletResponse response){
+        response.setContentType("text/html;charset=utf-8");
         System.out.println("REST PUT 修改 ");
         return "success";
     }
@@ -139,6 +141,12 @@ public class SpringMVCHandler {
         //模型数据为:loginMsg=success
         model.addAttribute("loginMsg","success");
         return "success";
+    }
+
+    @RequestMapping("/testRedirectView")
+    public String testRedirectView(){
+        //return "redirect:/ok.jsp";
+        return "forward:/ok.jsp";
     }
 
 }
