@@ -32,5 +32,6 @@
         <a href="testModelAndView">testModelAndView</a><br/>
         <a href="testMap">testMap</a><br/>
         <a href="testRedirectView">test RedirectView</a><br/>
+        <a href="emps">list All emps</a><br/>
     </body>
 </html>
