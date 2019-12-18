@@ -6,6 +6,7 @@ import com.znb.service.DepartmentService;
 import com.znb.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,6 +27,52 @@ public class RestCrudHandler {
 
     @Autowired
     private DepartmentService departmentService;
+
+    /**
+     * 修改功能：
+     */
+
+    /**
+     * 修改功能：去往修改页面
+     */
+    @RequestMapping(value = "/emp/{id}",method = RequestMethod.GET)
+    public String toUpdatePage(@PathVariable("id") Integer id,Map<String,Object> map){
+        //查询要修改的员工信息
+        Employee employee = employeeService.get(id);
+        map.put("employee",employee);
+        //部门数据
+        Collection<Department> depts = departmentService.getDepartments();
+        map.put("depts",depts);
+        //性别数据
+        Map<String,String> genders = new HashMap<String,String>();
+        genders.put("0","女");
+        genders.put("1","男");
+        map.put("genders",genders);
+        //去往修改页面
+        return "emp-update";
+    }
+
+    /**
+     * 删除功能
+     */
+    @RequestMapping(value = "/emp/{id}",method = RequestMethod.DELETE)
+    public String deleteEmp(@PathVariable("id") Integer id){
+        //删除员工
+        employeeService.delete(id);
+        //重定向到员工列表请求
+        return "redirect:/emps";
+    }
+
+    /**
+     * 添加功能：具体的添加操作
+     */
+    @RequestMapping(value = "/emp",method = RequestMethod.POST)
+    public String addEmp(Employee employee){
+        //添加员工
+        employeeService.saveOrUpdate(employee);
+        //回到列表页面：重定向到显示所有员工信息列表请求
+        return "redirect:/emps";
+    }
 
     /**
      * 添加功能：去往添加页面

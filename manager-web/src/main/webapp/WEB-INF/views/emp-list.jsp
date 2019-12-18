@@ -10,9 +10,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>success</title>
+    <title>员工列表</title>
+    <script type="text/javascript" src="static/js/jquery-3.4.1.min.js"></script>
+    <script>
+        $(function(){
+            $("._del").click(function(){
+                //确认是否要删除
+                var flag = window.confirm("是否确定删除？");
+                if(flag){
+                    var href = $(this).attr("href");
+                    $("form").attr("action",href).submit();
+                }
+                //取消<a> 的默认行为
+                return false;
+            });
+        });
+    </script>
 </head>
 <body>
+    <form action="" method="post">
+        <input type="hidden" name="_method" value="delete">
+    </form>
+    <h2>员工列表</h2>
     <table border="1px" align="center" width="70%" cellspacing="0px">
         <tr align="center">
             <th>ID</th>
@@ -30,9 +49,19 @@
                 <td>${emp.gender==0?"女":"男"}</td>
                 <td>${emp.department.departmentName}</td>
                 <td>
-                    <a href="#">Edit</a>
+                    <a href="emp/${emp.id}">Edit</a>
                     &nbsp;&nbsp;
-                    <a href="#">Delete</a>
+                    <!--
+                        解决思路：
+                            因为REST 风格的删除，需要发送的是 delete 请求。而delete
+                            的请求首先需要发送的是POST请求再加上_method=delete 的请求项
+                            来达到发送 delete 的效果。所以a标签发送的get请求需要被改造。
+
+                            给删除的超链接绑定事件，当触发了点击事件，可以在事件处理函数中
+                            获取到要发送的请求URL，再将获取到的请求URL设置到某个表单的action
+                            属性上，再将表单提交。最终将<a> 的默认行为取消掉。
+                    -->
+                    <a href="emp/${emp.id}" class="_del">Delete</a>
                 </td>
             </tr>
         </c:forEach>

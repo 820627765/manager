@@ -33,6 +33,8 @@
             表单标签在最终执行时回转化为原始的HTML标签
         -->
         <form:form action="emp" method="post" modelAttribute="employee">
+            <input type="hidden" name="_method" value="put">
+            <form:hidden path="id"/>
             lastName:
             <form:input path="lastName"/> <!-- path 就相当于 HTML 中 input 标签中的name属性--> <br/>
             Email:
@@ -43,7 +45,7 @@
             <form:select path="department.id" items="${depts}" itemLabel="departmentName" itemValue="id"/>
             <!--itemLabel 对应option 的显示名字，itemValue 对应option 的value值-->
             <br/>
-            <input type="submit" value="添加"/>
+            <input type="submit" value="修改"/>
         </form:form>
     </body>
 </html>
