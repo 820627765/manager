@@ -12,6 +12,21 @@
     <param-value>classpath:spring/applicationContext-root.xml</param-value>
   </context-param>
 
+  <!--字符编码过滤器-->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <!--配置REST 过滤器 HiddenHttpMethodFilter-->
   <filter>
     <filter-name>HiddenHttpMethodFilter</filter-name>

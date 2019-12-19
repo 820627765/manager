@@ -33,5 +33,8 @@
         <a href="testMap">testMap</a><br/>
         <a href="testRedirectView">test RedirectView</a><br/>
         <a href="emps">list All emps</a><br/>
+        <a href="testJson">返回JSON</a><br/>
+        <a href="download">下载</a><br/>
+
     </body>
 </html>

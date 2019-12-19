@@ -31,8 +31,9 @@
                 且：在表单form:form modelAttribute="employee" 中可以通过modelAttribute 来指定一个key 替换默认的 command 。
 
             表单标签在最终执行时回转化为原始的HTML标签
+            ${pageContext.request.contextPath} 该方式会得到项目的根路径，如 /manager
         -->
-        <form:form action="emp" method="post" modelAttribute="employee">
+        <form:form action="${pageContext.request.contextPath}/emp" method="post" modelAttribute="employee">
             <input type="hidden" name="_method" value="put">
             <form:hidden path="id"/>
             lastName:

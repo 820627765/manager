@@ -1,11 +1,21 @@
 package com.znb.web.controller;
 
+import com.znb.pojo.Employee;
+import com.znb.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -16,6 +26,9 @@ import java.util.Map;
  */
 @Controller
 public class SpringMVCHandler {
+    @Autowired
+    private EmployeeService employeeService;
+
     public SpringMVCHandler() {
         System.out.println("新建springMVCHandler实例......");
     }
@@ -148,5 +161,57 @@ public class SpringMVCHandler {
         //return "redirect:/ok.jsp";
         return "forward:/ok.jsp";
     }
+
+    /**
+     * springMVC 返回JSON
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/testJson")
+    public Collection<Employee> testJson(){
+        return employeeService.getAll();
+    }
+
+    /**
+     * 使用 HttpMessageConvert 完成下载功能：
+     *   首先HttpMessageConvert 支持：
+     *      @RequestBody
+     *      @ResponseBody
+     *      HttpEntity
+     *      ResponseEntity 用于将要下载的文件数据，以响应信息封装到ResponseEntity对象中，浏览器通过解析
+     *                     发送回去的响应数据，就可以进行一个下载操作。
+     *  下载的原理：将服务器端的文件以流的形式写到客户端。
+     *
+     */
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> testDownload(HttpSession session)throws Exception{
+        //将要下载的文件读取为一个字节数组
+        byte[] imgs;
+        ServletContext servletContext = session.getServletContext();
+        InputStream inputStream = servletContext.getResourceAsStream("static/images/favicon.png");
+        imgs = new byte[inputStream.available()];
+        inputStream.read(imgs);//将流中的数据读取到字节数组中
+        //将响应数据，以及一些响应头信息封装到ResponseEntity中
+        /**
+         *  new ResponseEntity<byte[]>(imgs,headers,statusCode);
+         *      参数1：发给浏览器端的数据
+         *      参数2：设置响应头
+         *      参数3：设置响应码
+         *  相当于，我自己给浏览器发送数据，不是服务器主动发。那我自己发，就得
+         *  告诉浏览器我发送得是什么数据，浏览器需要做什么操作。这就需要通过响应头信息
+         *  来告诉浏览器需要做什么操作。
+         */
+        HttpHeaders httpHeaders = new HttpHeaders();
+        //通过响应头，告诉浏览器当前是下载操作。Content-Disposition 是一个消息头名称
+        //attachment;filename=favicon.png 中的attachment表示是一个附件，filename表示附件的名字，可以随意写
+        //下载的时候提示的下载文件名就是通过filename 指定。
+        httpHeaders.add("Content-Disposition","attachment;filename=favicon.png");
+
+        HttpStatus httpStatus = HttpStatus.OK; // OK 就是 200，表示正常
+        ResponseEntity<byte[]> re = new ResponseEntity<byte[]>(imgs,httpHeaders,httpStatus);
+
+        return re;
+    }
+
 
 }

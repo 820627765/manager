@@ -31,6 +31,11 @@ public class RestCrudHandler {
     /**
      * 修改功能：
      */
+    @RequestMapping(value = "/emp",method = RequestMethod.PUT)
+    public String updateEmp(Employee employee){
+        employeeService.saveOrUpdate(employee);
+        return "redirect:/emps";
+    }
 
     /**
      * 修改功能：去往修改页面
