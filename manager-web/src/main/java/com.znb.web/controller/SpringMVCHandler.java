@@ -9,11 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
@@ -211,6 +214,24 @@ public class SpringMVCHandler {
         ResponseEntity<byte[]> re = new ResponseEntity<byte[]>(imgs,httpHeaders,httpStatus);
 
         return re;
+    }
+
+    /**
+     * 文件上传
+     */
+    @RequestMapping(value = "/upload",method = RequestMethod.POST)
+    public String testFileUpload(@RequestParam("desc") String desc,
+                                 @RequestParam("uploadFile") MultipartFile uploadFile,
+                                 HttpSession session)throws Exception{
+        //获取上传文件的名字
+        String uploadFileName = uploadFile.getOriginalFilename();
+        //获取服务器端的存放上传文件的upload文件夹的真实路径
+        ServletContext sc = session.getServletContext();
+        String realPath = sc.getRealPath("static"+File.separator+"uploads");
+        File targetFile = new File(realPath + File.separator + uploadFileName);
+        //该方法transferTo 就能实现将数据写到目标文件中。
+        uploadFile.transferTo(targetFile);
+        return "success";
     }
 
 

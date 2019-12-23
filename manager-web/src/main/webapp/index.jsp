@@ -36,5 +36,11 @@
         <a href="testJson">返回JSON</a><br/>
         <a href="download">下载</a><br/>
 
+        <form action="upload" method="post" enctype="multipart/form-data">
+            文件：<input type="file" name="uploadFile"><br/>
+            描述：<input type="text" name="desc"><br/>
+            <input type="submit" value="提交">
+        </form>
+
     </body>
 </html>
