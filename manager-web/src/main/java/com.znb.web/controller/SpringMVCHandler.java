@@ -27,6 +27,7 @@ import java.util.Map;
  * @Description:com.znb.web.SpringMVCHandler
  * @version:1.0
  */
+//@SessionAttributes(value={"emp"},types={String.class})
 @Controller
 public class SpringMVCHandler {
     @Autowired
@@ -34,6 +35,26 @@ public class SpringMVCHandler {
 
     public SpringMVCHandler() {
         System.out.println("新建springMVCHandler实例......");
+    }
+
+    @ModelAttribute
+    public void getEmp(@RequestParam(value = "id",required = false) Integer id,Map map){
+        System.out.println("执行modelAttribute 方法");
+        if(id != null){
+            map.put("emp",employeeService.get(id));
+        }
+    }
+
+    @RequestMapping(value = "/testSessionAttributes",method = RequestMethod.GET)
+    public String testSessionAttributes(Map<String,Object> map){
+        Employee emp = new Employee();
+        //因为@SessionAttributes(value={"emp"},types={String.class}) 中的value中key和当前匹配
+        //所以，放入请求域的同时，还会放一份到session中。
+        map.put("emp",emp);
+        //因为@SessionAttributes(value={"emp"},types={String.class}) 中的types中类型和当前存放的对象类型匹配
+        //所以，放入请求域的同时，还会放一份到session中。
+        map.put("school","school");
+        return "success";
     }
 
     @RequestMapping("/hello")
@@ -233,6 +254,4 @@ public class SpringMVCHandler {
         uploadFile.transferTo(targetFile);
         return "success";
     }
-
-
 }

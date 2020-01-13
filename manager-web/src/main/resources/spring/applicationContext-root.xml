@@ -6,4 +6,5 @@
         <import resource="applicationContext-dao.xml"></import>
         <import resource="applicationContext-service.xml"></import>
         <import resource="applicationContext-trans.xml"></import>
+<!--        <import resource="applicationContext-shiro.xml"></import>-->
 </beans>

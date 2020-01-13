@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--配置Shiro-->
+    <!--1.配置SecurityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--<property name="cacheManager" ref="cacheManager"/>-->
+        <property name="sessionManager" value="native"/>
+        <property name="realm" ref="jdbcRealm"/>
+    </bean>
+    <!--2.配置CacheManager
+      需要加入ehcache 的jar包及配置文件
+
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:xml/ehcache.xml"/>
+    </bean>
+    -->
+    <!--3.配置Realm
+      直接配置实现了 org.apache.shiro.realm.Realm 接口的bean
+    -->
+    <bean id="jdbcRealm" class="com.znb.web.realms.ShiroRealm"></bean>
+    <!--4.配置 LifecycleBeanPostProcessor 可以自定义的来调用配置再Spring IOC容器中的shiro 的bean 的生命周期方法-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!--5.启用IOC容器中使用shiro的注解，但必须再配置了LifecycleBeanPostProcessor 之后才可以使用-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    <!--6.配置ShiroFilter
+        id 必须和web.xml 中配置的 DelegatingFilterProxy 的filter 的 name 一致。
+    -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/index.jsp"/>
+        <!--没有权限的页面-->
+        <property name="unauthorizedUrl" value="unauthorized.jsp"/>
+        <!--配置哪些页面需要被保护，以及访问这些请求需要的权限
+          1） anon 是一个过滤器，表示可以被匿名访问
+          2） authc 是一个过滤器，表示必须认证（即登录）后才能访问
+        -->
+        <property name="filterChainDefinitions">
+            <value>
+                /favicon.ico = anon
+                /logo.png = anon
+                /login = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+</beans>

@@ -6,9 +6,7 @@ import com.znb.service.DepartmentService;
 import com.znb.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,11 +26,19 @@ public class RestCrudHandler {
     @Autowired
     private DepartmentService departmentService;
 
+    @ModelAttribute
+    public void getEmp(@RequestParam(value = "id",required = false) Integer id, Map map){
+        System.out.println("执行modelAttribute 方法");
+        if(id != null){
+            map.put("emp",employeeService.get(id));
+        }
+    }
+
     /**
      * 修改功能：
      */
     @RequestMapping(value = "/emp",method = RequestMethod.PUT)
-    public String updateEmp(Employee employee){
+    public String updateEmp(@ModelAttribute(value = "emp") Employee employee,String table){
         employeeService.saveOrUpdate(employee);
         return "redirect:/emps";
     }

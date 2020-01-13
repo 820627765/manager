@@ -40,7 +40,8 @@
             文件：<input type="file" name="uploadFile"><br/>
             描述：<input type="text" name="desc"><br/>
             <input type="submit" value="提交">
-        </form>
+        </form><br/>
+        <a href="testSessionAttributes">testSessionAttributes</a><br/>
 
     </body>
 </html>
